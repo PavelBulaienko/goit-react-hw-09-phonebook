@@ -1,0 +1,35 @@
+a {
+  text-decoration: none;
+  color: cadetblue;
+}
+.active {
+  color: rgb(255, 0, 136);
+}
+.navLink:not(:last-child) {
+  margin-right: 20px;
+}
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.btnLogout {
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: darkslateblue;
+  color: white;
+  font-size: 20px;
+  &:hover {
+    background-color: rgb(61, 36, 221);
+  }
+}
+.userMenuContainer {
+  display: flex;
+  align-items: center;
+}
+.userMenuAvatar {
+  margin-right: 10px;
+}
+.userMenuName {
+  margin-right: 20px;
+}
