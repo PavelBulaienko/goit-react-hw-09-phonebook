@@ -1,48 +1,45 @@
-import { Component } from 'react';
-import { connect } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import authOperations from '../redux/auth/auth-operations';
 
-class LoginView extends Component {
-  state = {
-    email: '',
-    password: '',
+const LoginView = () => {
+  const [email, setEmail] = useState('');
+  const handleChangeEmail = (e) => {
+    setEmail({ email: e.target.value });
   };
 
-  handleChange = ({ target: { name, value } }) => {
-    this.setState({ [name]: value });
+  const [password, setPassword] = useState('');
+  const handleChangePassword = (e) => {
+    setPassword({ password: e.target.value });
   };
 
-  handleSubmit = (e) => {
+  const dispatch = useDispatch();
+  const onLogin = (credentials) => dispatch(authOperations.logIn(credentials));
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    this.props.onLogin(this.state);
+    await onLogin({ email: email.email, password: password.password });
 
-    this.setState({ name: '', email: '', password: '' });
+    setEmail('');
+    setPassword('');
   };
 
-  render() {
-    const { email, password } = this.state;
-    return (
-      <div>
-        <h1>Страница логин</h1>
-        <form onSubmit={this.handleSubmit} autoComplete="off">
-          <label>
-            Почта
-            <input type="email" name="email" value={email} onChange={this.handleChange} />
-          </label>
-          <label>
-            Пароль
-            <input type="password" name="password" value={password} onChange={this.handleChange} />
-          </label>
-          <button type="submit">Войти</button>
-        </form>
-      </div>
-    );
-  }
-}
-
-const mapDispatchToProps = {
-  onLogin: authOperations.logIn,
+  return (
+    <div>
+      <h1>Страница логин</h1>
+      <form onSubmit={handleSubmit} autoComplete="off">
+        <label>
+          Почта
+          <input type="email" name="email" onChange={handleChangeEmail} />
+        </label>
+        <label>
+          Пароль
+          <input type="password" name="password" onChange={handleChangePassword} />
+        </label>
+        <button type="submit">Войти</button>
+      </form>
+    </div>
+  );
 };
 
-export default connect(null, mapDispatchToProps)(LoginView);
+export default LoginView;

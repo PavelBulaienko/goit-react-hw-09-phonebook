@@ -1,44 +1,31 @@
 import '../style/App.css';
 import Phonebook from './Phonebook';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import HomeView from './HomeView';
 import RegisterView from './RegisterView';
 import LoginView from './LoginView';
 import AppBar from './AppBar';
-import { Component } from 'react';
 import authOperations from '../redux/auth/auth-operations';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import { useEffect } from 'react';
 
-class App extends Component {
-  componentDidMount() {
-    this.props.onGetCurrentUser();
-  }
+const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(authOperations.getCurrentUser()), [dispatch]);
 
-  render() {
-    return (
-      <div className="App">
-        <AppBar />
-        <Switch>
-          <Route exact path="/" component={HomeView} />
-          <PublicRoute
-            path="/register"
-            restricted
-            component={RegisterView}
-            redirectTo="/contacts"
-          />
-          <PublicRoute path="/login" restricted component={LoginView} redirectTo="/contacts" />
-          {/* <Route path="/login" component={LoginView} /> */}
-          <PrivateRoute path="/contacts" component={Phonebook} redirectTo="login" />
-        </Switch>
-      </div>
-    );
-  }
-}
-
-const mapDispatchToProps = {
-  onGetCurrentUser: authOperations.getCurrentUser,
+  return (
+    <div className="App">
+      <AppBar />
+      <Switch>
+        <Route exact path="/" component={HomeView} />
+        <PublicRoute path="/register" restricted component={RegisterView} redirectTo="/contacts" />
+        <PublicRoute path="/login" restricted component={LoginView} redirectTo="/contacts" />
+        <PrivateRoute path="/contacts" component={Phonebook} redirectTo="login" />
+      </Switch>
+    </div>
+  );
 };
 
-export default connect(null, mapDispatchToProps)(App);
+export default App;
